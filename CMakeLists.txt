@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.10)
+project(ThreadPool)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+file(GLOB_RECURSE SOURCES src/*.cpp src/impl/*.cpp)
+add_library(${PROJECT_NAME} ${SOURCES})
+include_directories(PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/impl)
+
+file(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp)
+if(TEST_SOURCES)
+    enable_testing()
+    add_executable(runTests ${TEST_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/tests/main.cpp)
+    set(CATCH2_HEADER_URL "https://github.com/catchorg/Catch2/releases/download/v2.13.10/catch.hpp")
+    set(CATCH2_HEADER_LOCAL ${CMAKE_BINARY_DIR}/third_party)
+    file(DOWNLOAD ${CATCH2_HEADER_URL} ${CATCH2_HEADER_LOCAL}/catch.hpp)
+    target_include_directories(runTests PRIVATE ${CATCH2_HEADER_LOCAL})
+    target_include_directories(runTests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    target_link_libraries(runTests PRIVATE ${PROJECT_NAME})
+    add_test(NAME UnitTests COMMAND runTests)
+endif()
