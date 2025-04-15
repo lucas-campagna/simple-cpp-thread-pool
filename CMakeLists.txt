@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/impl/*.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
-include_directories(PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/impl)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/impl)
 
-if(BUILD_TESTING)
+if(CTP_BUILD_TESTING)
     enable_testing()
     file(GLOB_RECURSE TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp)
     add_executable(thread_pool_tests ${TEST_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/tests/main.cpp)
